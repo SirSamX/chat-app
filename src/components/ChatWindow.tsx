@@ -1,4 +1,3 @@
-
 export default function ChatWindow() {
   return (
     <div className="w-3/4 bg-white dark:bg-gray-900 h-screen p-4 flex flex-col">
@@ -19,7 +18,7 @@ export default function ChatWindow() {
       <div className="p-2 border-t border-gray-300 dark:border-gray-700 flex items-center">
         <input
           type="text"
-          className="flex-1 p-2 border rounded-md dark:bg-gray-800 dark:text-gray-100"
+          className="flex-1 p-2 border rounded-md dark:bg-gray-800 dark:text-gray-100 outline-none"
           placeholder="Type a message"
         />
         <button className="ml-2 p-2 bg-blue-500 text-white rounded-md dark:bg-blue-700">
