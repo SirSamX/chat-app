@@ -1,19 +1,19 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ChatPreview from "./ChatPreview";
-import db from "@/app/lib/pocketbase";
 import { saveChats } from "@/app/api/save";
-import { loadChats } from "@/app/api/load";
+import { fetchChats } from "@/app/api/load";
 
 
 export default function Sidebar() {
 
   useEffect(() => {
-    loadChats()
+    fetchChats().then(result => setChats(result.map(chat => chat.chat)))
+    
   });
 
-  const [chats, setChats] = useState(["maurice", "jarak", "blubbeere"])
+  const [chats, setChats] = useState(["Chat 1"])
 
   function addChat() {
     const chatName = "Chat " + (chats.length + 1)
