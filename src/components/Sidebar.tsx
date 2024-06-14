@@ -11,7 +11,7 @@ export default function Sidebar() {
   useEffect(() => {
     fetchChats().then(result => setChats(result.map(chat => chat.chat)))
     
-  });
+  }, []);
 
   const [chats, setChats] = useState(["Chat 1"])
 
@@ -28,7 +28,9 @@ export default function Sidebar() {
         
         <button
           className="text-gray-600 dark:text-gray-400"
-          onClick={addChat}>+
+          onClick={addChat}
+        >
+          +
         </button>
       </div>
 
