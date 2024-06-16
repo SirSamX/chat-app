@@ -1,5 +1,6 @@
 "use client";
 
+import pb from "@/app/lib/pocketbase";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -10,6 +11,14 @@ export default function Header() {
   function toggleDropdown() {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  async function signIn() {
+    await pb.collection("users").authWithOAuth2({
+      provider: "discord",
+    })
+    console.log(pb.authStore.isValid)
+    console.log(pb.authStore.token)
+  }
 
   return (
     <div className="w-full bg-primary dark:bg-primary-dark p-4 flex items-center justify-between">
@@ -31,7 +40,7 @@ export default function Header() {
           {isDropdownOpen && (
           <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md z-10">
             <div className="py-1">
-              <button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+              <button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none" onClick={signIn}>
                 Profile
               </button>
               <button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">

@@ -1,4 +1,6 @@
-import { chatsColl } from "../lib/pocketbase";
+"use server";
+
+import pb, { chatsColl } from "../lib/pocketbase";
 import { RecordModel } from "pocketbase";
 
 

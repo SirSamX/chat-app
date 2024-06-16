@@ -1,4 +1,5 @@
-import pb from "../lib/pocketbase"
+"use server";
+
 import { chatsColl } from "../lib/pocketbase"
 
 
