@@ -1,6 +1,8 @@
 import PocketBase from "pocketbase";
 
-const db = new PocketBase('http://127.0.0.1:8090');
-const chatsColl = db.collection("test")
-export default db;
+const url = "https://chatap.pockethost.io/"
+const pb = new PocketBase(url);
+
+const chatsColl = pb.collection("chats")
+export default pb;
 export { chatsColl };

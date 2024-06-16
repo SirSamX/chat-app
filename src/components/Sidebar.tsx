@@ -10,9 +10,8 @@ export default function Sidebar() {
   const chatNameInput = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    console.log("1")
     fetchChats()
-      .then(result => setChats(result.map(chat => chat.chat)))
+      .then(result => setChats(result.map(chat => chat.name)))
       .catch(error => console.error(error))
   }, []);
 

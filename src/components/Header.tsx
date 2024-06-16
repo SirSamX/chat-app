@@ -1,13 +1,14 @@
 "use client";
+
 import Image from "next/image";
 import { useState } from "react";
+
 
 export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const toggleDropdown = () => {
+  function toggleDropdown() {
     setIsDropdownOpen(!isDropdownOpen);
-    console.debug()
   };
 
   return (
@@ -22,6 +23,7 @@ export default function Header() {
               alt="Profile"
               width={32}
               height={32}
+              priority={true}
             />
             <span className="hidden md:block text-black dark:text-white">Test Dummy</span>
           </button>
@@ -34,6 +36,9 @@ export default function Header() {
               </button>
               <button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
                 Settings
+              </button>
+              <button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none" onClick={() => window.location.assign("https://chatap.pockethost.io/_/")}>
+                PocketBase
               </button>
               <button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
                 Logout
