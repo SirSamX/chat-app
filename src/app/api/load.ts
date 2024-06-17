@@ -1,4 +1,4 @@
-"use server";
+//"use server";
 
 import pb, { chatsColl } from "../lib/pocketbase";
 import { RecordModel } from "pocketbase";
