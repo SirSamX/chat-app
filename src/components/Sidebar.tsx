@@ -26,7 +26,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-1/4 bg-gray-100 dark:bg-gray-800 h-screen p-4">
+    <div className="w-1/6 bg-gray-100 dark:bg-gray-800 h-screen p-5 overflow-y-scroll">
       <div className="flex items-center justify-between p-2 border-b border-gray-300 dark:border-gray-700">
         <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Chats</h2>
         
@@ -46,10 +46,10 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <div className="mt-4 test">
+      <div className="mt-4">
 
         {chats.map((chat, index) => (
-          <ChatPreview key={index} chatName={chat} />
+          <ChatPreview key={index} chatName={chat} profilePictureUrl="/profile.jpg" lastMessage="test last message yay" />
         ))}
         
       </div>

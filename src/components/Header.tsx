@@ -2,6 +2,7 @@
 
 import pb from "@/app/lib/pocketbase";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 
@@ -22,13 +23,13 @@ export default function Header() {
 
   return (
     <div className="w-full bg-primary dark:bg-primary-dark p-4 flex items-center justify-between">
-      <h1 className="text-2xl font-bold text-black dark:text-white">Chat App</h1>
+      <Link href={"/"} className="text-2xl font-bold text-black dark:text-white">Chat App</Link>
       <div className="flex items-center space-x-4">
         <div className="relative">
           <button onClick={toggleDropdown} className="flex items-center space-x-2 text-white focus:outline-none">
             <Image
               src="/profile.jpg"
-              className="h-8 w-8 rounded-full"
+              className="rounded-full"
               alt="Profile"
               width={32}
               height={32}
