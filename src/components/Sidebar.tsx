@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import ChatPreview from "./ChatPreview";
-import { saveChats } from "@/app/api/save";
-import { fetchChats } from "@/app/api/load";
+import { saveChats, fetchChats } from "@/app/lib/chats";
 
 
 export default function Sidebar() {
