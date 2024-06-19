@@ -2,11 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import Message, { MessageProps } from "./Message";
+import Image from "next/image";
 
 
 export default function ChatWindow() {
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [messages, setMessages] = useState<MessageProps[]>([])
   const inputElement = useRef<HTMLInputElement>(null)
+
+  function toggleSearch() {
+    setIsSearchOpen(!isSearchOpen)
+  }
 
   function sendMessage() {
     const message = inputElement.current
@@ -27,6 +33,16 @@ export default function ChatWindow() {
 
       <div className="flex items-center justify-between p-2 border-b border-gray-300 dark:border-gray-700">
         <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Chat Name</h2>
+        <div>
+          {isSearchOpen && (
+            <input
+              type="text"
+              placeholder="Search"
+              className="p-1 border rounded-md dark:bg-gray-800 dark:text-gray-100 outline-none mr-4"
+            />
+          )}
+          <button onClick={toggleSearch}><Image src={"/icons/search.svg"} width={32} height={32} alt="Search"></Image></button>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-scroll p-4 max-h-lvh">

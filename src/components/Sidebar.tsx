@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import ChatPreview from "./ChatPreview";
-import { saveChats, fetchChats } from "@/app/lib/chats";
+import { newChat, fetchChats } from "@/app/lib/chats";
 
 
 export default function Sidebar() {
@@ -22,7 +22,7 @@ export default function Sidebar() {
     chatName = chatName || "New Chat";
     chatNameInput.current.value = ""
     setChats([...chats, chatName])
-    saveChats(chatName)
+    newChat(chatName)
   }
 
   return (
