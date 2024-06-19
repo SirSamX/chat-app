@@ -5,17 +5,11 @@ import SignIn from '@/components/SignIn';
 
 export default function Home() {
   return (
-    <main>
-
-      <Header />
-      
-      
-      <div className="flex flex-1">
-        <SignIn />
+    <main>  
+      <div className="flex">
         <Sidebar />
         <ChatWindow />
       </div>
-      
     </main>
   );
 }
