@@ -5,7 +5,7 @@ import SignIn from '@/components/SignIn';
 
 export default function Home() {
   return (
-    <main className='overflow-hidden'>
+    <main>
 
       <Header />
       
