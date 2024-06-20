@@ -29,7 +29,7 @@ export default function ChatWindow() {
   }
 
   return (
-    <div className="w-5/6 bg-white dark:bg-gray-900 overflow-y-scroll p-4 flex flex-col">
+    <div className="w-5/6 bg-white dark:bg-gray-900 overflow-y-hidden p-4 flex flex-col">
 
       <div className="flex items-center justify-between p-2 border-b border-gray-300 dark:border-gray-700">
         <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Chat Name</h2>

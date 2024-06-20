@@ -14,7 +14,8 @@ export default function Header() {
   }
 
   return (
-    <div className="w-full bg-primary dark:bg-primary-dark p-4 flex items-center justify-between">
+    <>
+    <div className="w-1/3 left-1/2 -translate-x-1/2 h-auto border-solid border-2 border-sky-500 p-4 flex items-center justify-between absolute top-0">
       <Link href={"/"} className="text-2xl font-bold text-black dark:text-white">Chat App</Link>
       <div className="flex items-center space-x-4">
         <div className="relative">
@@ -51,5 +52,6 @@ export default function Header() {
         </div>
       </div>
     </div>
+    </>
   )
 };
