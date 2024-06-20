@@ -1,16 +1,13 @@
-import pb from "./pocketbase"
+"use server"
+
+import { cookies } from "next/headers"
 
  
-export async function handleLogin() {
-  await pb.collection("users").authWithOAuth2({
-    provider: "discord",
-  })
-
-  /*const sessionData = pb.authStore.exportToCookie.toString()
-  console.log(sessionData)
-	cookies().set("session", sessionData, {
+export async function handleLogin(sessionData: string) {
+  cookies().set("sessionToken", sessionData, {
 		httpOnly: true,
 		secure: true,
 		path: '/',
-  })*/
+    sameSite: "strict",
+  })
 }
