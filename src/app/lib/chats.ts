@@ -11,6 +11,6 @@ export async function fetchChats(): Promise<RecordModel[]> {
 export async function newChat(chatName: string) {
   await chatsColl.create({
     "name": chatName,
-    "members": {}
+    "members": [""]
   })
 }
