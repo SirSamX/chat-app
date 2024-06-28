@@ -3,7 +3,6 @@
 import React from 'react';
 import AuthButton from './AuthBtn';
 import styles from "@/app/login/page.module.css";
-
 import { login } from '@/app/auth/login';
 
 type Styles = {
@@ -20,10 +19,10 @@ const AuthButtons: React.FC = () => {
       }
 
   const providers = [
-    { name: 'discord', disabled: false },
-    { name: 'google', disabled: false },
-    { name: 'github', disabled: true },
-    { name: 'twitter', disabled: true }
+    { name: 'Discord', disabled: false },
+    { name: 'Google', disabled: false },
+    { name: 'Github', disabled: true },
+    { name: 'Twitter', disabled: true }
   ];
 
   return (
