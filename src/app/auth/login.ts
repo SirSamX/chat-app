@@ -9,6 +9,7 @@ export async function login(provider: string) {
     })
 
     if(authData.token) {
-        window.location.href = 'http://localhost:3000'
+        window.location.href = 'http://localhost:3001'
+
     }
 }
