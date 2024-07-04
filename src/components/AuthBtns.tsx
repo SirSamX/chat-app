@@ -19,10 +19,10 @@ const AuthButtons: React.FC = () => {
       }
 
   const providers = [
-    { name: 'Discord', disabled: false },
-    { name: 'Google', disabled: false },
-    { name: 'Github', disabled: true },
-    { name: 'Twitter', disabled: true }
+    { name: 'discord', disabled: false },
+    { name: 'google', disabled: false },
+    { name: 'github', disabled: true },
+    { name: 'twitter', disabled: true }
   ];
 
   return (
