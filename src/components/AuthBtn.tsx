@@ -11,6 +11,12 @@ interface AuthButtonProps {
   handleLogin: (provider: string) => void;
 }
 
+function capitalized(provider: string): string {
+  if(!provider) return ""
+  return provider.charAt(0).toUpperCase() + provider.slice(1)
+
+}
+
 const AuthButton: React.FC<AuthButtonProps> = ({ provider, disabled = false, styles, handleLogin }) => {
   
   return (
@@ -20,7 +26,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({ provider, disabled = false, sty
       style={{ '--url': `url("/providers/${provider}.png")` } as React.CSSProperties}
       disabled={disabled}
     >
-        {provider}
+        {capitalized(provider)}
     </button>
   );
 };
