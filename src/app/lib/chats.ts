@@ -1,6 +1,4 @@
-"use server";
-
-import { chatsColl } from "./pocketbase";
+import pb, { chatsColl } from "./pocketbase";
 import { RecordModel } from "pocketbase";
 
 
@@ -9,9 +7,11 @@ export async function fetchChats(): Promise<RecordModel[]> {
 }
 
 export async function newChat(chatName: string) {
+  if (!pb.authStore.model || !chatName) return
+
   await chatsColl.create({
     "name": chatName,
-    "members": [""],
-    "messages": chatName
+    "members": pb.authStore.model.id,
+    "archived": false
   })
 }

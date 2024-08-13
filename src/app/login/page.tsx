@@ -4,7 +4,6 @@ import React from "react";
 import AuthButtons from "@/components/AuthBtns";
 
 
-
 export default function Auth() {
 
   return(

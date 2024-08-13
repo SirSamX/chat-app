@@ -21,7 +21,7 @@ const AuthButtons: React.FC = () => {
   const providers = [
     { name: 'discord', disabled: false },
     { name: 'google', disabled: false },
-    { name: 'github', disabled: true },
+    { name: 'github', disabled: false },
     { name: 'twitter', disabled: true }
   ];
 

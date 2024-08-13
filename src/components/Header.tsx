@@ -2,14 +2,36 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import pb from "@/app/lib/pocketbase";
+import { useRouter } from "next/navigation";
 
 
 export default function Header() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const router = useRouter()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(!!pb.authStore.model)
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    setName(pb.authStore.model?.username ?? "");
+  }, [])
+  
+  useEffect(() => {
+    const unsubscribe = pb.authStore.onChange(() => {
+      setIsAuthenticated(!!pb.authStore.model)
+    })
+    return () => unsubscribe()
+  }, [])
 
   function toggleDropdown() {
     setIsDropdownOpen(!isDropdownOpen)
+  }
+
+  function logout() {
+    pb.authStore.clear()
+    setIsDropdownOpen(false)
+    router.refresh()
   }
 
   return (
@@ -27,27 +49,30 @@ export default function Header() {
               height={32}
               priority={true}
             />
-            <span className="hidden md:block text-black dark:text-white">Test Dummy</span>
+            <span className="hidden md:block text-black dark:text-white">{name}</span>
           </button>
 
           {isDropdownOpen && (
-          <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md z-10">
-            <div className="py-1">
-              <Link href={"/login"}><button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
-                Login
-              </button>
-              </Link>
-              <button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
-                Settings
-              </button>
-              <Link href={"https://chatap.pockethost.io/_/"} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
-                PocketBase
-              </Link>
-              <button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
-                Logout
-              </button>
+            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md z-10">
+              <div className="py-1">
+                {!isAuthenticated && (
+                  <Link href={"/login"}><button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                    Log In
+                  </button></Link>
+                )}
+                <button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                  Settings
+                </button>
+                <Link href={"https://chatap.pockethost.io/_/"} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                  PocketBase
+                </Link>
+                {isAuthenticated && (
+                  <button className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none" onClick={logout}>
+                    Log Out
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
           )}
         </div>
       </div>

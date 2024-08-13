@@ -64,7 +64,7 @@ export default function ChatWindow() {
           ref={inputElement}
         />
         <button
-          className="ml-2 p-2 bg-blue-500 text-white rounded-md dark:bg-blue-700"
+          className="ml-4 py-2 px-4 bg-blue-500 text-white rounded-md dark:bg-blue-700"
           onClick={sendMessage}
         >
           Send

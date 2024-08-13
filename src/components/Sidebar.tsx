@@ -1,27 +1,40 @@
-"use client";
+"use client"
 
-import { useState, useEffect, useRef } from "react";
-import ChatPreview from "./ChatPreview";
-import { newChat, fetchChats } from "@/app/lib/chats";
+import { useState, useEffect, useRef } from "react"
+import ChatPreview from "./ChatPreview"
+import { newChat, fetchChats } from "@/app/lib/chats"
 
+interface Chat {
+  name: string
+  lastMessage: string
+}
 
 export default function Sidebar() {
   const chatNameInput = useRef<HTMLInputElement>(null)
+  const [chats, setChats] = useState<Chat[]>([])
 
   useEffect(() => {
     fetchChats()
-      .then(result => setChats(result.map(chat => chat.name)))
+      .then(async result => {
+        const chats = await Promise.all(result.map(async chat => {
+          const lastMessage = chat.messages?.[0] || "No messages yet"
+          console.log(chat)
+          return {
+            name: chat.name,
+            lastMessage
+          }
+        }))
+        setChats(chats)
+      })
       .catch(error => console.error(error))
-  }, []);
-
-  const [chats, setChats] = useState<string[]>([])
+  }, [])
 
   function addChat() {
     if (chatNameInput.current == null) return
     let chatName = chatNameInput.current.value
-    chatName = chatName || "New Chat";
+    chatName = chatName || "New Chat"
     chatNameInput.current.value = ""
-    setChats([...chats, chatName])
+    setChats([...chats, { name: chatName, lastMessage: "No messages yet" }])
     newChat(chatName)
   }
 
@@ -47,12 +60,15 @@ export default function Sidebar() {
       </div>
 
       <div className="mt-4">
-
         {chats.map((chat, index) => (
-          <ChatPreview key={index} chatName={chat} profilePictureUrl="/profile.jpg" lastMessage="test last message yay" />
+          <ChatPreview
+            key={index}
+            chatName={chat.name}
+            profilePictureUrl="/profile.jpg"
+            lastMessage={chat.lastMessage}
+          />
         ))}
-        
       </div>
     </div>
-  );
-};
+  )
+}
