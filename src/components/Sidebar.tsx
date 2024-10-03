@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import ChatPreview from "./ChatPreview"
-import { newChat, fetchChats } from "@/app/lib/chats"
+import { newChat, fetchChats } from "@/lib/chats"
 
 interface Chat {
   name: string

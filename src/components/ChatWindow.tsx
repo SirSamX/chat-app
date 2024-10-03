@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Message, { MessageProps } from "./Message";
 import Image from "next/image";
+import { Button } from "./ui/button";
+import { Textarea } from "@/components/ui/textarea"
 
 
 export default function ChatWindow() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [messages, setMessages] = useState<MessageProps[]>([])
-  const inputElement = useRef<HTMLInputElement>(null)
+  const inputElement = useRef<HTMLTextAreaElement>(null)
 
   function toggleSearch() {
     setIsSearchOpen(!isSearchOpen)
@@ -26,6 +28,13 @@ export default function ChatWindow() {
       content: message.value
     }])
     message.value = ""
+  }
+
+  function handleEnterKey(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
   }
 
   return (
@@ -57,18 +66,14 @@ export default function ChatWindow() {
       </div>
 
       <div className="p-2 border-t border-gray-300 dark:border-gray-700 flex items-center">
-        <input
-          type="text"
-          className="flex-1 p-2 border rounded-md dark:bg-gray-800 dark:text-gray-100 outline-none"
-          placeholder="Message"
+        <Textarea
+          autoFocus
+          placeholder="Type your message here."
           ref={inputElement}
+          className="resize-none"
+          onKeyDown={handleEnterKey}
         />
-        <button
-          className="ml-4 py-2 px-4 bg-blue-500 text-white rounded-md dark:bg-blue-700"
-          onClick={sendMessage}
-        >
-          Send
-        </button>
+        <Button variant="outline" onClick={sendMessage} className="ml-4">Send</Button>
       </div>
     </div>
   );
