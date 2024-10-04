@@ -8,7 +8,7 @@ interface ChatPreviewProps {
 
 export default function ChatPreview({ chatName, profilePictureUrl, lastMessage }: ChatPreviewProps) {
   return (
-    <div className="p-2 py-5 flex items-center border-b border-gray-300 dark:border-gray-700 cursor-pointer">
+    <div className="p-2 py-5 flex items-center border-b border-zinc-300 dark:border-zinc-700 cursor-pointer">
 
       {profilePictureUrl && (
         <Image

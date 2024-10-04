@@ -18,7 +18,6 @@ export default function Sidebar() {
       .then(async result => {
         const chats = await Promise.all(result.map(async chat => {
           const lastMessage = chat.messages?.[0] || "No messages yet"
-          console.log(chat)
           return {
             name: chat.name,
             lastMessage
@@ -38,34 +37,36 @@ export default function Sidebar() {
     newChat(chatName)
   }
 
+  function handleEnterKey(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      addChat()
+    }
+  }
+
   return (
-    <div className="w-1/6 bg-gray-100 dark:bg-gray-800 h-screen p-5 overflow-y-scroll">
-      <div className="flex items-center justify-between p-2 border-b border-gray-300 dark:border-gray-700">
+    <div className="w-1/6 bg-zinc-200 dark:bg-zinc-900 h-screen p-5 overflow-y-scroll">
+      <div className="flex items-center justify-between p-2 border-b border-zinc-300 dark:border-zinc-700">
         <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Chats</h2>
         
-        <div>
+        <div className="flex">
           <input
             ref={chatNameInput}
             type="text"
             placeholder="New Chat"
-            className="p-1 border rounded-md dark:bg-gray-800 dark:text-gray-100 outline-none mr-4"
+            className="p-1 border border-zinc-700 rounded-md bg-inherit dark:bg-inherit dark:text-gray-100 outline-none mx-4"
+            onKeyDown={handleEnterKey}
           />
-          <button
-            className="text-gray-600 dark:text-gray-400"
-            onClick={addChat}
-          >
-            +
-          </button>
         </div>
       </div>
 
       <div className="mt-4">
-        {chats.map((chat, index) => (
+        {chats.map(({ name, lastMessage }, index) => (
           <ChatPreview
             key={index}
-            chatName={chat.name}
+            chatName={name}
             profilePictureUrl="/profile.jpg"
-            lastMessage={chat.lastMessage}
+            lastMessage={lastMessage}
           />
         ))}
       </div>

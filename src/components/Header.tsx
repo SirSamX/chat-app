@@ -11,9 +11,6 @@ export default function Header() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(!!pb.authStore.model)
   
-
-
-  
   useEffect(() => {
     const unsubscribe = pb.authStore.onChange(() => {
       setIsAuthenticated(!!pb.authStore.model)

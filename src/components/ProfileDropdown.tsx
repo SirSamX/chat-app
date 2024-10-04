@@ -42,23 +42,27 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
         <DropdownMenuContent>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           {!isAuthenticated && (
-            <DropdownMenuItem>
-              <Link href={"/login"}>
-                Login
-              </Link>
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuItem>
+                <Link href={"/login"}>
+                  Login
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
           )}
-          <DropdownMenuSeparator />
           <DropdownMenuItem>
             <Link href={"https://chatap.pockethost.io/_/"}>
               PocketBase
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
           {isAuthenticated && (
-            <DropdownMenuItem onClick={logout}>
-              Log Out
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={logout}>
+                Log Out
+              </DropdownMenuItem>
+            </>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
