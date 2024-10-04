@@ -52,17 +52,7 @@ export default function ChatWindow() {
     <div className="w-5/6 bg-zinc-100 dark:bg-zinc-800 overflow-y-hidden p-4 flex flex-col">
 
       <div className="flex items-center justify-between p-2 border-b border-zinc-300 dark:border-zinc-700">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Chat Name</h2>
-        <Header />
-        <div>
-          <input
-            onChange={(e) => setQuery(e.target.value)}
-            type="text"
-            placeholder="Search"
-            className="p-1 rounded-md border bg-inherit dark:bg-inherit mr-4"
-          />
-          <Image src={"/icons/search.svg"} width={32} height={32} alt="Search" />
-        </div>
+        <Header setQuery={setQuery}/>
       </div>
 
       <div className="flex-1 overflow-y-scroll p-4 max-h-lvh">
@@ -81,7 +71,7 @@ export default function ChatWindow() {
           autoFocus
           placeholder="Type your message here."
           ref={messageInput}
-          className="resize-none dark:focus-visible:ring-zinc-700 border dark:border-zinc-700 border-zinc-300"
+          className="resize-none dark:focus-visible:ring-zinc-700 border dark:border-zinc-700 border-zinc-300 text-zinc-900 dark:text-zinc-100 text-lg"
           onKeyDown={handleEnterKey}
         />
         <Button variant="outline" onClick={sendMessage} className="ml-4"><Image src={"/icons/send.svg"} width={32} height={32} alt="Send"></Image></Button>

@@ -4,9 +4,11 @@ import { useState, useEffect, useRef } from "react"
 import ChatPreview from "./ChatPreview"
 import { newChat, fetchChats } from "@/lib/chats"
 
+
 interface Chat {
-  name: string
-  lastMessage: string
+  name: string;
+  lastMessage: string;
+  selected: boolean;
 }
 
 export default function Sidebar() {
@@ -20,7 +22,8 @@ export default function Sidebar() {
           const lastMessage = chat.messages?.[0] || "No messages yet"
           return {
             name: chat.name,
-            lastMessage
+            lastMessage,
+            selected: false,
           }
         }))
         setChats(chats)
@@ -33,7 +36,7 @@ export default function Sidebar() {
     let chatName = chatNameInput.current.value
     chatName = chatName || "New Chat"
     chatNameInput.current.value = ""
-    setChats([...chats, { name: chatName, lastMessage: "No messages yet" }])
+    setChats([...chats, { name: chatName, lastMessage: "No messages yet", selected: true }])
     newChat(chatName)
   }
 
@@ -54,15 +57,16 @@ export default function Sidebar() {
             ref={chatNameInput}
             type="text"
             placeholder="New Chat"
-            className="p-1 border border-zinc-700 rounded-md bg-inherit dark:bg-inherit dark:text-gray-100 outline-none mx-4"
+            className="p-1 border border-zinc-700 rounded-md bg-inherit dark:bg-inherit dark:text-zinc-100 outline-none mx-4"
             onKeyDown={handleEnterKey}
           />
         </div>
       </div>
 
       <div className="mt-4">
-        {chats.map(({ name, lastMessage }, index) => (
+        {chats.map(({ name, lastMessage, selected }, index) => (
           <ChatPreview
+            selected={selected}
             key={index}
             chatName={name}
             profilePictureUrl="/profile.jpg"
