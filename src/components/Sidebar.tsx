@@ -48,7 +48,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-1/6 bg-zinc-200 dark:bg-zinc-900 h-screen p-5 overflow-y-scroll">
+    <div className="w-1/6 max-w-96 min-w-56 bg-zinc-200 dark:bg-zinc-900 h-screen p-5 overflow-y-scroll">
       <div className="flex items-center justify-between p-2 border-b border-zinc-300 dark:border-zinc-700">
         <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Chats</h2>
         

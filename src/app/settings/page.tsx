@@ -1,10 +1,10 @@
 import Header from "@/components/Header";
 
 // ignore this file for now
-export default function Home() {
+export default function Settings() {
   return (
     <main>
-      <Header />
+      Settings
     </main>
   );
 }

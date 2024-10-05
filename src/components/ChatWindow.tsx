@@ -39,7 +39,7 @@ export default function ChatWindow() {
     if (!query) {
       setFilteredMessages(messages);
       return;
-    }
+    } 
 
     const filteredMessages = messages.filter((msg) =>
       msg.content.toLowerCase().includes(query.toLowerCase())
@@ -49,13 +49,13 @@ export default function ChatWindow() {
   }, [query, messages]);
 
   return (
-    <div className="w-5/6 bg-zinc-100 dark:bg-zinc-800 overflow-y-hidden p-4 flex flex-col">
+    <div className="w-full h-screen bg-zinc-100 dark:bg-zinc-800 p-4 flex flex-col">
 
       <div className="flex items-center justify-between p-2 border-b border-zinc-300 dark:border-zinc-700">
         <Header setQuery={setQuery}/>
       </div>
 
-      <div className="flex-1 overflow-y-scroll p-4 max-h-lvh">
+      <div className="flex-1 overflow-y-scroll p-4">
         {filteredMessages.map(({ sender, date, content }, index) => (
           <Message
             key={index}
