@@ -13,16 +13,15 @@ type Styles = {
 
 const AuthButtons: React.FC = () => {
     
-    async function handleLogin(provider: string) {
-        await login(provider)
-        window.location.href = "/"
-      }
+  async function handleLogin(provider: string) {
+    await login(provider)
+    window.location.href = "/"
+  }
 
   const providers = [
     { name: 'discord', disabled: false },
     { name: 'google', disabled: false },
     { name: 'github', disabled: false },
-    { name: 'twitter', disabled: true }
   ];
 
   return (

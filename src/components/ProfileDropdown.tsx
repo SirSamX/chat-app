@@ -5,6 +5,7 @@ import {DropdownMenu, DropdownMenuContent, DropdownMenuSeparator,DropdownMenuTri
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import pb from "@/lib/pocketbase";
+import { useRouter } from "next/navigation";
 
 
 interface DropdownMenuProps {
@@ -14,6 +15,9 @@ interface DropdownMenuProps {
 
 export default function ProfileDropdownMenu({ isAuthenticated, logout }: DropdownMenuProps) {
   const [name, setName] = useState("Login");
+  const [darkMode, setDarkMode] = useState(true)
+
+  const router = useRouter()
 
   useEffect(() => {
     setName(pb.authStore.model?.username ?? "Login");
@@ -21,12 +25,23 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
 
   function getAvatarImage() {
     if (isAuthenticated) {
-      return "https://github.com/shadcn.png";
+      return `https://github.com/${pb.authStore.model?.username}.png`;
     } else {
       return "/profile.jpg";
     }
   }
 
+  function toggleTheme() {
+    setDarkMode(!darkMode)
+    if(!darkMode) {
+      localStorage.setItem("theme", "light")
+    }
+    else {
+      localStorage.setItem("theme", "dark")
+    }
+    console.log(localStorage.getItem("theme"))
+    console.log(darkMode)
+  }
   return (
     <>
       <DropdownMenu>
@@ -71,6 +86,10 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
             <Link href={"https://chatap.pockethost.io/_/"}>
               PocketBase
             </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <button onClick={toggleTheme}>Toggle Theme</button>
           </DropdownMenuItem>
           {isAuthenticated && (
             <>

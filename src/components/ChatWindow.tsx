@@ -14,14 +14,14 @@ export default function ChatWindow() {
   const messageInput = useRef<HTMLTextAreaElement>(null)
   const [query, setQuery] = useState("")
 
-  function sendMessage() {
+  function sendMessage(sender: string = "self") {
     const message = messageInput.current
     if (message == null || message.value == "") {
       return
     }
     
     setMessages([...messages, {
-      sender: "self",
+      sender: sender,
       date: new Date(),
       content: message.value
     }])
@@ -31,7 +31,11 @@ export default function ChatWindow() {
   function handleEnterKey(event: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      sendMessage();
+      if (event.ctrlKey) {
+        sendMessage("not self");
+      } else {
+        sendMessage("self");
+      }
     }
   }
 
@@ -74,7 +78,7 @@ export default function ChatWindow() {
           className="resize-none dark:focus-visible:ring-zinc-700 border dark:border-zinc-700 border-zinc-300 text-zinc-900 dark:text-zinc-100 text-lg"
           onKeyDown={handleEnterKey}
         />
-        <Button variant="outline" onClick={sendMessage} className="ml-4"><Image src={"/icons/send.svg"} width={32} height={32} alt="Send"></Image></Button>
+        <Button variant="outline" onClick={() => sendMessage()} className="ml-4"><Image src={"/icons/send.svg"} width={32} height={32} alt="Send"></Image></Button>
       </div>
     </div>
   );
