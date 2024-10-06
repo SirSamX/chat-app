@@ -5,6 +5,7 @@ import pb from "@/lib/pocketbase";
 import { useRouter } from "next/navigation";
 import ProfileDropdown from "@/components/ProfileDropdown";
 import Image from "next/image";
+import { getCurrentUser, logout, getIsAuthenticated } from "@/lib/user";
 
 
 interface HeaderProps {
@@ -12,21 +13,14 @@ interface HeaderProps {
 }
 
 export default function Header({ setQuery }: HeaderProps) {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!getCurrentUser())
   const router = useRouter()
-  const [isAuthenticated, setIsAuthenticated] = useState(!!pb.authStore.model)
   
   useEffect(() => {
     return () => {pb.authStore.onChange(() => {
-      setIsAuthenticated(!!pb.authStore.model)
+      setIsAuthenticated(getIsAuthenticated())
     })}
   }, [])
-
-  function logout() {
-    pb.authStore.clear()
-    router.refresh()
-  }
-
-
 
   return (
     <div className={`flex items-center justify-between w-full`}>
@@ -46,7 +40,10 @@ export default function Header({ setQuery }: HeaderProps) {
       </div>
 
       <div className="flex items-center space-x-4">
-        <ProfileDropdown isAuthenticated={isAuthenticated} logout={logout}/>
+        <ProfileDropdown isAuthenticated={isAuthenticated} logout={() => {
+          logout()
+          router.refresh()
+        }}/>
       </div>
 
     </div>

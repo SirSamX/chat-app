@@ -16,9 +16,7 @@ export default function ChatWindow() {
 
   function sendMessage(sender: string = "self") {
     const message = messageInput.current
-    if (message == null || message.value == "") {
-      return
-    }
+    if (message == null || message.value.trim() == "") return
     
     setMessages([...messages, {
       sender: sender,

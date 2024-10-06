@@ -4,8 +4,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {DropdownMenu, DropdownMenuContent, DropdownMenuSeparator,DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel} from "@/components/ui/dropdown-menu"
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import pb from "@/lib/pocketbase";
 import { useRouter } from "next/navigation";
+import { getCurrentUser } from "@/lib/user";
 
 
 interface DropdownMenuProps {
@@ -20,12 +20,12 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
   const router = useRouter()
 
   useEffect(() => {
-    setName(pb.authStore.model?.username ?? "Login");
+    setName(getCurrentUser()?.username ?? "Login");
   }, [])
 
   function getAvatarImage() {
     if (isAuthenticated) {
-      return `https://github.com/${pb.authStore.model?.username}.png`;
+      return `https://github.com/${getCurrentUser()?.username}.png`;
     } else {
       return "/profile.jpg";
     }
