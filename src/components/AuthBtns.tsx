@@ -3,7 +3,7 @@
 import React from 'react';
 import AuthButton from './AuthBtn';
 import styles from "@/app/login/page.module.css";
-import { login } from '@/lib/auth/login';
+import { login } from '@/lib/user';
 
 type Styles = {
   authBtn: string;

@@ -1,43 +1,46 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import ChatPreview from "./ChatPreview"
-import { newChat, fetchChats } from "@/lib/chats"
+import ChatPreview, { ChatPreviewProps } from "./ChatPreview"
+import { createChat, getLastMessage, getUserChats } from "@/lib/chat"
 
-
-interface Chat {
-  name: string;
-  lastMessage: string;
-  selected: boolean;
-}
 
 export default function Sidebar() {
   const chatNameInput = useRef<HTMLInputElement>(null)
-  const [chats, setChats] = useState<Chat[]>([])
+  const [chats, setChats] = useState<ChatPreviewProps[]>([])
 
   useEffect(() => {
-    fetchChats()
-      .then(async result => {
-        const chats = await Promise.all(result.map(async chat => {
-          const lastMessage = chat.messages?.[0] || "No messages yet"
-          return {
-            name: chat.name,
-            lastMessage,
-            selected: false,
-          }
-        }))
-        setChats(chats)
-      })
-      .catch(error => console.error(error))
+    getUserChats()
+    .then(async result => {
+      const chats = await Promise.all(result.map(async chat => {
+        return {
+          id: chat.id,
+          name: chat.name,
+          selected: false,
+          profilePictureUrl: null,
+        }
+      }))
+      setChats(chats)
+    })
+    .catch(error => {
+      console.error(error);
+    })
   }, [])
 
   function addChat() {
-    if (chatNameInput.current == null) return
-    let chatName = chatNameInput.current.value
-    chatName = chatName || "New Chat"
+    if (chatNameInput.current == null || chatNameInput.current.value.trim() == "") return
+    const chatName = chatNameInput.current.value
     chatNameInput.current.value = ""
-    setChats([...chats, { name: chatName, lastMessage: "No messages yet", selected: true }])
-    newChat(chatName)
+
+    createChat(chatName)
+      .then(async result => {
+        if (result?.id) {
+          setChats([...chats, { id: result.id, name: chatName, selected: true, profilePictureUrl: null}])
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   function handleEnterKey(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -64,13 +67,13 @@ export default function Sidebar() {
       </div>
 
       <div className="mt-4">
-        {chats.map(({ name, lastMessage, selected }, index) => (
+        {chats.map(({ id, name, selected, profilePictureUrl }, index) => (
           <ChatPreview
-            selected={selected}
             key={index}
-            chatName={name}
-            profilePictureUrl="/profile.jpg"
-            lastMessage={lastMessage}
+            id={id}
+            name={name}
+            selected={selected}
+            profilePictureUrl={profilePictureUrl}
           />
         ))}
       </div>

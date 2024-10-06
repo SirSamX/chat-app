@@ -1,15 +1,26 @@
 "use client";
 
-import Image from "next/image";
 
-interface ChatPreviewProps {
-  chatName: string;
-  profilePictureUrl: string;
-  lastMessage: string;
+import { getLastMessage } from "@/lib/chat";
+import Image from "next/image";
+import { useState, useEffect } from "react"
+
+export interface ChatPreviewProps {
+  id: string;
+  name: string;
+  profilePictureUrl: string | null;
   selected: boolean;
 }
 
-export default function ChatPreview({ chatName, profilePictureUrl, lastMessage, selected }: ChatPreviewProps) {
+export default function ChatPreview({ id, name, profilePictureUrl, selected }: ChatPreviewProps) {
+  const [lastMessage, setLastMessage] = useState<string | null>(null)
+
+  useEffect(() => {
+    getLastMessage(id).then(message => {
+      setLastMessage(message)
+    })
+  }, [id])
+
   return (
     <div className="py-3 border-b border-zinc-300 dark:border-zinc-700 cursor-pointer">
       <div
@@ -28,7 +39,7 @@ export default function ChatPreview({ chatName, profilePictureUrl, lastMessage, 
         )}
 
         <div className="flex flex-col">
-          <span className="text-zinc-900 dark:text-zinc-100">{chatName}</span>
+          <span className="text-zinc-900 dark:text-zinc-100">{name}</span>
           {lastMessage && <span className="text-zinc-600 dark:text-zinc-400">{lastMessage}</span>}
         </div>
       </div>
