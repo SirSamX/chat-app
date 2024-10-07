@@ -50,7 +50,7 @@ export default function Sidebar() {
   function handleEnterKey(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      addChat()
+      addChat();
     }
   }
 
