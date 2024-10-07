@@ -6,9 +6,6 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { Textarea } from "@/components/ui/textarea"
 import Header from '../components/Header';
-import { messagesColl } from "@/lib/message";
-import { fetchMsgs } from "@/lib/chat";
-import { ListResult, RecordModel } from "pocketbase";
 
 
 export default function ChatWindow() {
@@ -16,8 +13,6 @@ export default function ChatWindow() {
   const [filteredMessages, setFilteredMessages] = useState<MessageProps[]>([])
   const messageInput = useRef<HTMLTextAreaElement>(null)
   const [query, setQuery] = useState("")
-
-  const [msgs, setmsgs] = useState<MessageProps[]>([])
 
   function sendMessage(sender: string = "self") {
     const message = messageInput.current
@@ -55,14 +50,6 @@ export default function ChatWindow() {
     setFilteredMessages(filteredMessages);
   }, [query, messages]);
 
-  useEffect(() => {
-    fetchMsgs("3flev6g058ce026")
-    .then(msgs => {
-      setmsgs(msgs)
-    })
-  }, [])
-  
-
   return (
     <div className="w-full h-screen bg-zinc-100 dark:bg-zinc-800 p-4 flex flex-col">
 
@@ -71,22 +58,12 @@ export default function ChatWindow() {
       </div>
 
       <div className="flex-1 overflow-y-scroll p-4">
-        {messages.map(({ sender, date, content }, index) => (
+        {filteredMessages.map(({ sender, date, content }, index) => (
           <Message
             key={index}
             sender={sender}
             date={date}
             content={content}
-          />
-        ))}
-      </div>
-      <div className="flex-1 overflow-y-scroll p-4">
-        {msgs.map((msg, index) => (
-          <Message
-            key={index}
-            sender={msg.sender}
-            date={msg.date}
-            content={msg.content}
           />
         ))}
       </div>

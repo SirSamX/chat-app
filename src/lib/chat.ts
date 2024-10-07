@@ -1,8 +1,6 @@
 import pb from "./pocketbase";
 import { messagesColl } from "./message";
 import { getCurrentUser } from "./user";
-import { ListResult, RecordModel } from "pocketbase";
-import { MessageProps } from "@/components/Message";
 
 
 export const chatsColl = pb.collection("chats")
@@ -38,7 +36,7 @@ export async function getLastMessage(chatId: string) {
       { sort: "-created" }
     );
     return message ? message.content : null;
-    
+    console.log(message);
   } catch (error) {
     return null;
   }
@@ -46,26 +44,4 @@ export async function getLastMessage(chatId: string) {
 
 async function deleteChat(chatId: string) {
   chatsColl.delete(chatId);
-}
-
-
-
-export async function fetchMsgs(chatId: string): Promise<MessageProps[]> {
-  try {
-    const msgs = await messagesColl.getList<RecordModel>(1, 50, {
-      filter: `chat = "${chatId}"`,
-      sort: "-created"
-    })
-    return msgs.items.map(item => 
-      (console.log(item.user.email),
-    {
-      sender: item.user.username || "self",
-      date: new Date(item.created),
-      content: item.content
-    }));
-  }
-  catch(error) {
-    console.error(error);
-    return [];
-  }
 }
