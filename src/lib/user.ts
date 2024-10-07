@@ -1,7 +1,7 @@
 import pb from "./pocketbase"
 
 
-const usersColl = pb.collection("users")
+export const usersColl = pb.collection("users")
 
 export async function login(provider: string) {
   await usersColl.authWithOAuth2({

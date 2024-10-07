@@ -1,11 +1,14 @@
 import pb from "./pocketbase";
 import { messagesColl } from "./message";
 import { getCurrentUser } from "./user";
-import { createContext } from 'react';
 
 
-const chatsColl = pb.collection("chats")
-const CurrentChat = createContext("");
+export const chatsColl = pb.collection("chats")
+
+export interface Chat {
+  id: string;
+  name: string;
+}
 
 export async function getUserChats() {
   return await chatsColl.getFullList({

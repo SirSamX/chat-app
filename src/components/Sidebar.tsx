@@ -1,13 +1,14 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import ChatPreview, { ChatPreviewProps } from "./ChatPreview"
-import { createChat, getLastMessage, getUserChats } from "@/lib/chat"
+import ChatPreview from "./ChatPreview"
+import { Chat, createChat, getUserChats } from "@/lib/chat"
 
 
 export default function Sidebar() {
-  const chatNameInput = useRef<HTMLInputElement>(null)
-  const [chats, setChats] = useState<ChatPreviewProps[]>([])
+  const chatNameInput = useRef<HTMLInputElement>(null);
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [selectedChat, setSelectedChat] = useState(1);
 
   useEffect(() => {
     getUserChats()
@@ -16,10 +17,9 @@ export default function Sidebar() {
         return {
           id: chat.id,
           name: chat.name,
-          selected: false,
-          profilePictureUrl: null,
         }
       }))
+
       setChats(chats)
     })
     .catch(error => {
@@ -35,7 +35,11 @@ export default function Sidebar() {
     createChat(chatName)
       .then(async result => {
         if (result?.id) {
-          setChats([...chats, { id: result.id, name: chatName, selected: true, profilePictureUrl: null}])
+          setChats([...chats, {
+            id: result.id,
+            name: chatName,
+          }]);
+          setSelectedChat(chats.length);
         }
       })
       .catch(error => {
@@ -67,14 +71,15 @@ export default function Sidebar() {
       </div>
 
       <div className="mt-4">
-        {chats.map(({ id, name, selected, profilePictureUrl }, index) => (
-          <ChatPreview
-            key={index}
-            id={id}
-            name={name}
-            selected={selected}
-            profilePictureUrl={profilePictureUrl}
-          />
+        {chats.map(({ id, name }, index) => (
+          <div key={id} onClick={() => setSelectedChat(index)}>
+            <ChatPreview
+              id={id}
+              name={name}
+              selected={selectedChat === index}
+              profilePictureUrl={""}
+            />
+          </div>
         ))}
       </div>
     </div>
