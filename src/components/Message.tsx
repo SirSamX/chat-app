@@ -1,11 +1,16 @@
+import { getCurrentUser } from "@/lib/user";
+
 export interface MessageProps {
+  id: string;
   sender: string;
   date: Date;
   content: string;
 }
 
-export default function Message({ sender, date, content }: MessageProps) {
-  if (sender == "self") {
+export default function Message({ id, sender, date, content }: MessageProps) {
+  const currentUser = getCurrentUser();
+
+  if (currentUser && sender == currentUser.id) {
     return (
       <div className="mb-4 text-right">
         <div

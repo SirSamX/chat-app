@@ -12,7 +12,7 @@ export interface Chat {
 
 export async function getUserChats() {
   return await chatsColl.getFullList({
-      filter: `members.id = "${getCurrentUser()?.id}"`,
+      filter: `members.id ?= "${getCurrentUser()?.id}"`,
   });
 }
 
@@ -42,6 +42,6 @@ export async function getLastMessage(chatId: string) {
   }
 }
 
-async function deleteChat(chatId: string) {
+export async function deleteChat(chatId: string) {
   chatsColl.delete(chatId);
 }

@@ -1,11 +1,13 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import Message, { MessageProps } from "./Message";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { Textarea } from "@/components/ui/textarea"
 import Header from '../components/Header';
+import { getChatMessages, sendMessage } from "@/lib/message";
+import { CurrentChat } from "@/app/page";
 
 
 export default function ChatWindow() {
@@ -14,26 +16,34 @@ export default function ChatWindow() {
   const messageInput = useRef<HTMLTextAreaElement>(null)
   const [query, setQuery] = useState("")
 
-  function sendMessage(sender: string = "self") {
-    const message = messageInput.current
-    if (message == null || message.value.trim() == "") return
+  const selectedChat = useContext(CurrentChat)
+
+  function sendMsg() {
+    const message = messageInput.current?.value
+    if (!selectedChat) console.log("sending")
+    if (message == null || message.trim() == "" || selectedChat == null || messageInput.current == null) return
+
+    messageInput.current.value = ""
     
-    setMessages([...messages, {
-      sender: sender,
-      date: new Date(),
-      content: message.value
-    }])
-    message.value = ""
+    sendMessage(selectedChat.id, message)
+      .then(async msg => {
+        if (msg == null) return
+        setMessages([...messages, {
+          id: msg.id,
+          sender: msg.user,
+          date: new Date(msg.created),
+          content: msg.content,
+        }])
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   function handleEnterKey(event: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      if (event.ctrlKey) {
-        sendMessage("not self");
-      } else {
-        sendMessage("self");
-      }
+      sendMsg();
     }
   }
 
@@ -50,6 +60,16 @@ export default function ChatWindow() {
     setFilteredMessages(filteredMessages);
   }, [query, messages]);
 
+  useEffect(() => {
+    setMessages([])
+    if (!selectedChat) return;
+    getChatMessages(selectedChat.id)
+      .then(async messages => {
+      if (messages == null) return
+      setMessages(messages)
+    })
+  }, [selectedChat]);
+
   return (
     <div className="w-full h-screen bg-zinc-100 dark:bg-zinc-800 p-4 flex flex-col">
 
@@ -57,9 +77,14 @@ export default function ChatWindow() {
         <Header setQuery={setQuery}/>
       </div>
 
+      {!selectedChat &&
+        <div>Please select a chat to start messaging.</div>
+      }
+
       <div className="flex-1 overflow-y-scroll p-4">
-        {filteredMessages.map(({ sender, date, content }, index) => (
+        {filteredMessages.map(({ id, sender, date, content }, index) => (
           <Message
+            id={id}
             key={index}
             sender={sender}
             date={date}
@@ -76,7 +101,7 @@ export default function ChatWindow() {
           className="resize-none dark:focus-visible:ring-zinc-700 border dark:border-zinc-700 border-zinc-300 text-zinc-900 dark:text-zinc-100 text-lg"
           onKeyDown={handleEnterKey}
         />
-        <Button variant="outline" onClick={() => sendMessage()} className="ml-4"><Image src={"/icons/send.svg"} width={32} height={32} alt="Send"></Image></Button>
+        <Button variant="outline" onClick={() => sendMsg()} className="ml-4"><Image src={"/icons/send.svg"} width={32} height={32} alt="Send"></Image></Button>
       </div>
     </div>
   );

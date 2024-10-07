@@ -1,3 +1,4 @@
+import { MessageProps } from "@/components/Message";
 import pb from "./pocketbase";
 import { getCurrentUser } from "./user";
 
@@ -8,20 +9,26 @@ export async function sendMessage(chatId: string, content: string) {
     const user = getCurrentUser();
     if (!user) return
 
-    await messagesColl.create({
-        chat_id: chatId,
-        user_id: user.id,
-        content,
+    return await messagesColl.create({
+        chat: chatId,
+        user: user.id,
+        content: content,
     });
 }
 
-async function getChatMessages(chatId: string) {
-    return await messagesColl.getFullList({
+export async function getChatMessages(chatId: string) {
+    const messages = await messagesColl.getFullList({
         filter: `chat = "${chatId}"`,
         sort: "-created",
     });
+    return messages.map((msg): MessageProps => ({
+        id: msg.id,
+        content: msg.content,
+        sender: msg.user,
+        date: new Date(msg.created),
+    }))
 }
 
-async function deleteMessage(messageId: string) {
+export async function deleteMessage(messageId: string) {
     await messagesColl.delete(messageId);
 }

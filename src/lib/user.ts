@@ -1,3 +1,4 @@
+import { AuthModel } from "pocketbase";
 import pb from "./pocketbase"
 
 
@@ -13,7 +14,7 @@ export function logout() {
   pb.authStore.clear()
 }
 
-export function getCurrentUser() {
+export function getCurrentUser(): AuthModel {
   return pb.authStore.model;
 }
 
