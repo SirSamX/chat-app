@@ -38,8 +38,8 @@ export default function ChatPreview({ id, name, profilePictureUrl, selected }: C
           />
         )}
 
-        <div className="flex flex-col">
-          <span className="text-zinc-900 dark:text-zinc-100">{name}</span>
+        <div className="flex flex-col text-nowrap overflow-hidden">
+          <span className="text-zinc-900 dark:text-zinc-100 text-lg">{name}</span>
           {lastMessage && <span className="text-zinc-600 dark:text-zinc-400">{lastMessage}</span>}
         </div>
       </div>

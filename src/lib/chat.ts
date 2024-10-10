@@ -31,11 +31,10 @@ export async function getChatDetails(chatId: string) {
 
 export async function getLastMessage(chatId: string) {
   try {
-    const message = await messagesColl.getFirstListItem(
-      `chat = "${chatId}"`,
-      { sort: "+created" }
+    const message = await messagesColl.getList(1, 1,
+      { sort: "-created", filter: `chat = "${chatId}"`}
     );
-    return message ? message.content : null;
+    return message ? message.items[0].content : null;
   } catch (error) {
     return null;
   }
