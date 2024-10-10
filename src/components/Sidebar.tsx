@@ -1,18 +1,16 @@
 "use client"
 
-import { useState, useEffect, useRef, createContext } from "react"
+import { useState, useEffect, useRef, useContext } from "react"
 import ChatPreview from "./ChatPreview"
 import { Chat, createChat, getUserChats } from "@/lib/chat"
+import { useChatContext, CurrentChatContextType } from "./providers/ChatContext";
 
 
-interface SidebarProps {
-  setSelectedChat: (chat: Chat) => void;
-}
-
-export default function Sidebar({ setSelectedChat }: SidebarProps) {
+export default function Sidebar() {
   const chatNameInput = useRef<HTMLInputElement>(null);
   const [chats, setChats] = useState<Chat[]>([]);
   const [selectedChatIndex, setSelectedChatIndex] = useState(0);
+  const { selectedChat, setSelectedChat } = useChatContext() as CurrentChatContextType;
   
 
   useEffect(() => {
@@ -33,9 +31,7 @@ export default function Sidebar({ setSelectedChat }: SidebarProps) {
   }, [])
 
   useEffect(() => {
-    if (chats.length > selectedChatIndex) {
-      setSelectedChat(chats[selectedChatIndex]);
-    }
+    setSelectedChat(chats[selectedChatIndex]);
   }, [chats, selectedChatIndex, setSelectedChat]);
 
   function addChat() {

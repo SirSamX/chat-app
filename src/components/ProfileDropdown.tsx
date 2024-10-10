@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/lib/user";
-import ThemeContext from "./ThemeContext";
 
 
 interface DropdownMenuProps {
@@ -32,19 +31,6 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
     }
   }
 
-  async function toggleTheme() {
-    setDarkMode(!darkMode)
-    if(!darkMode) {
-      localStorage.setItem("theme", "light")
-      location.reload()
-    }
-    else {
-      localStorage.setItem("theme", "dark")
-      location.reload()
-    }
-    console.log(localStorage.getItem("theme"))
-    console.log(darkMode)
-  }
   return (
     <>
       <DropdownMenu>
@@ -57,6 +43,7 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
             <span className="hidden md:block text-black dark:text-white">{name}</span>
           </div>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent className={`${darkMode ? "" : "bg-[#08080a] text-white"}`}>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           {!isAuthenticated && (
@@ -89,10 +76,6 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
             <Link href={"https://chatap.pockethost.io/_/"}>
               PocketBase
             </Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <button onClick={toggleTheme}>Toggle Theme</button>
           </DropdownMenuItem>
           {isAuthenticated && (
             <>

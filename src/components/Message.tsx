@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/user";
 
+
 export interface MessageProps {
   id: string;
   sender: string;

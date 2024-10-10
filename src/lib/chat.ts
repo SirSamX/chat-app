@@ -33,10 +33,9 @@ export async function getLastMessage(chatId: string) {
   try {
     const message = await messagesColl.getFirstListItem(
       `chat = "${chatId}"`,
-      { sort: "-created" }
+      { sort: "+created" }
     );
     return message ? message.content : null;
-    console.log(message);
   } catch (error) {
     return null;
   }

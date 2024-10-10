@@ -1,39 +1,43 @@
 "use client";
 
-import { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Message, { MessageProps } from "./Message";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { Textarea } from "@/components/ui/textarea"
 import Header from '../components/Header';
-import { getChatMessages, sendMessage } from "@/lib/message";
-import { CurrentChat } from "@/app/page";
+import { getChatMessages, messagesColl, sendMessage } from "@/lib/message";
+import { CurrentChatContextType, useChatContext } from "@/components/providers/ChatContext";
+import { RecordModel } from "pocketbase";
+import { getCurrentUser } from "@/lib/user";
 
 
 export default function ChatWindow() {
-  const [messages, setMessages] = useState<MessageProps[]>([])
-  const [filteredMessages, setFilteredMessages] = useState<MessageProps[]>([])
-  const messageInput = useRef<HTMLTextAreaElement>(null)
-  const [query, setQuery] = useState("")
-
-  const selectedChat = useContext(CurrentChat)
+  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [filteredMessages, setFilteredMessages] = useState<MessageProps[]>([]);
+  const messageInput = useRef<HTMLTextAreaElement>(null);
+  const [query, setQuery] = useState("");
+  const { selectedChat, setSelectedChat } = useChatContext() as CurrentChatContextType;
+  
+  const updateMessages = useCallback((msg: RecordModel) => {
+    setMessages((prevMessages) => [{
+      id: msg.id,
+      sender: msg.user,
+      date: new Date(msg.created),
+      content: msg.content,
+    }, ...prevMessages]);
+  }, []);  
 
   function sendMsg() {
     const message = messageInput.current?.value
-    if (!selectedChat) console.log("sending")
     if (message == null || message.trim() == "" || selectedChat == null || messageInput.current == null) return
 
     messageInput.current.value = ""
-    
+
     sendMessage(selectedChat.id, message)
       .then(async msg => {
         if (msg == null) return
-        setMessages([...messages, {
-          id: msg.id,
-          sender: msg.user,
-          date: new Date(msg.created),
-          content: msg.content,
-        }])
+        updateMessages(msg)
       })
       .catch(error => {
         console.error(error);
@@ -61,14 +65,30 @@ export default function ChatWindow() {
   }, [query, messages]);
 
   useEffect(() => {
+    const user = getCurrentUser();
+    if (!selectedChat || !user) return;
+
     setMessages([])
-    if (!selectedChat) return;
+
     getChatMessages(selectedChat.id)
       .then(async messages => {
-      if (messages == null) return
-      setMessages(messages)
-    })
-  }, [selectedChat]);
+        if (messages == null) return
+        setMessages(messages)
+      })
+      .catch((error) => {console.error(error)});
+
+      messagesColl.subscribe('*', 
+        (e) => {
+          const msg = e.record
+          updateMessages(msg)
+        },
+        { filter: `chat = "${selectedChat.id}" && user != "${user.id}"` }
+      );
+
+    return () => {
+      messagesColl.unsubscribe('*')
+    };
+  }, [selectedChat, updateMessages]);
 
   return (
     <div className="w-full h-screen bg-zinc-100 dark:bg-zinc-800 p-4 flex flex-col">
@@ -78,10 +98,12 @@ export default function ChatWindow() {
       </div>
 
       {!selectedChat &&
-        <div>Please select a chat to start messaging.</div>
+        <div className="h-screen flex items-center justify-center text-gray-900 dark:text-zinc-100 text-2xl">
+          <p>Please select a chat to start messaging.</p>
+        </div>
       }
 
-      <div className="flex-1 overflow-y-scroll p-4">
+      <div className="flex grow flex-col-reverse overflow-y-scroll p-4">
         {filteredMessages.map(({ id, sender, date, content }, index) => (
           <Message
             id={id}
