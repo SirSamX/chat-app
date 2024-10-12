@@ -10,6 +10,7 @@ import { getChatMessages, messagesColl, sendMessage } from "@/lib/message";
 import { CurrentChatContextType, useChatContext } from "@/components/providers/ChatContext";
 import { RecordModel } from "pocketbase";
 import { getCurrentUser } from "@/lib/user";
+import { formatMessage } from "@/lib/message";
 
 
 export default function ChatWindow() {
@@ -20,12 +21,7 @@ export default function ChatWindow() {
   const { selectedChat, setSelectedChat } = useChatContext() as CurrentChatContextType;
   
   const updateMessages = useCallback((msg: RecordModel) => {
-    setMessages((prevMessages) => [{
-      id: msg.id,
-      sender: msg.user,
-      date: new Date(msg.created),
-      content: msg.content,
-    }, ...prevMessages]);
+    setMessages((prevMessages) => [formatMessage(msg), ...prevMessages]);
   }, []);  
 
   function sendMsg() {
@@ -104,11 +100,12 @@ export default function ChatWindow() {
       }
 
       <div className="flex grow flex-col-reverse overflow-y-scroll p-4">
-        {filteredMessages.map(({ id, sender, date, content }, index) => (
+        {filteredMessages.map(({ id, sender,senderName, date, content }, index) => (
           <Message
             id={id}
             key={index}
             sender={sender}
+            senderName={senderName}
             date={date}
             content={content}
           />

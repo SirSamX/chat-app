@@ -15,17 +15,21 @@ interface DropdownMenuProps {
 
 export default function ProfileDropdownMenu({ isAuthenticated, logout }: DropdownMenuProps) {
   const [name, setName] = useState("Login");
-  const [darkMode, setDarkMode] = useState(true)
+  const router = useRouter();
+  const user = getCurrentUser();
 
-  const router = useRouter()
+  const openProfile = () => {
+    router.push(`/user/${user?.id}`);
+  };
 
   useEffect(() => {
-    setName(getCurrentUser()?.username ?? "Login");
-  }, [])
+    if (!user) return;
+    setName(user.username);
+  }, [user]);
 
   function getAvatarImage() {
     if (isAuthenticated) {
-      return `https://github.com/${getCurrentUser()?.username}.png`;
+      return `https://github.com/${user?.username}.png`;
     } else {
       return "/profile.jpg";
     }
@@ -44,7 +48,7 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
           </div>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className={`${darkMode ? "" : "bg-[#08080a] text-white"}`}>
+        <DropdownMenuContent>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           {!isAuthenticated && (
             <>
@@ -59,10 +63,8 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
           {isAuthenticated && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Link href={"/user/SirSam"}>
-                  Profile
-                </Link>
+              <DropdownMenuItem onClick={openProfile}>
+                Profile
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link href={"/settings"}>

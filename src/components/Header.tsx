@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import ProfileDropdown from "@/components/ProfileDropdown";
 import Image from "next/image";
 import { getCurrentUser, logout, getIsAuthenticated } from "@/lib/user";
+import { CurrentChatContextType, useChatContext } from "./providers/ChatContext";
 
 
 interface HeaderProps {
@@ -13,8 +14,9 @@ interface HeaderProps {
 }
 
 export default function Header({ setQuery }: HeaderProps) {
-  const [isAuthenticated, setIsAuthenticated] = useState(!!getCurrentUser())
-  const router = useRouter()
+  const [isAuthenticated, setIsAuthenticated] = useState(!!getCurrentUser());
+  const router = useRouter();
+  const currentChat = useChatContext();
   
   useEffect(() => {
     return () => {pb.authStore.onChange(() => {
@@ -24,7 +26,9 @@ export default function Header({ setQuery }: HeaderProps) {
 
   return (
     <div className={`flex items-center justify-between w-full`}>
-      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Chat Name</h2>
+      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+        {currentChat?.selectedChat?.name}
+      </h2>
 
       <div className="flex w-1/2">
 
