@@ -1,10 +1,11 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {DropdownMenu, DropdownMenuContent, DropdownMenuSeparator,DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel} from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuSeparator,DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel } from "@/components/ui/dropdown-menu"
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser, logout } from "@/lib/user";
+import pb from "@/lib/pocketbase";
 
 
 export default function ProfileDropdownMenu() {
@@ -21,8 +22,8 @@ export default function ProfileDropdownMenu() {
   useEffect(() => {
     if (!user) return;
     setName(user.username);
-    setProfilePicture(user.avatar)
-  }, [user]);
+    setProfilePicture(pb.files.getUrl(user, user.avatar, {thumb: '100x100'}));
+  }, [user, profilePicture]);
 
   return (
     <>
@@ -30,7 +31,7 @@ export default function ProfileDropdownMenu() {
         <DropdownMenuTrigger>
           <div className="flex items-center gap-2">
             <Avatar>
-              <AvatarImage src={profilePicture} />
+              <AvatarImage src={profilePicture}/>
               <AvatarFallback className="outline outline-zinc-600 dark:outline-zinc-400">
                 {name[0]}
               </AvatarFallback>
