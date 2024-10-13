@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main>
       <ChatContext>
-        <div className="flex">
+        <div className="flex text-gray-900 dark:text-zinc-100">
           <Sidebar/>
           <ChatWindow />
         </div>

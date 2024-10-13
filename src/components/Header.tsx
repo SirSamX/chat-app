@@ -5,8 +5,8 @@ import pb from "@/lib/pocketbase";
 import { useRouter } from "next/navigation";
 import ProfileDropdown from "@/components/ProfileDropdown";
 import Image from "next/image";
-import { getCurrentUser, logout, getIsAuthenticated } from "@/lib/user";
-import { CurrentChatContextType, useChatContext } from "./providers/ChatContext";
+import { getCurrentUser, logout } from "@/lib/user";
+import { useChatContext } from "./providers/ChatContext";
 
 
 interface HeaderProps {
@@ -20,7 +20,7 @@ export default function Header({ setQuery }: HeaderProps) {
   
   useEffect(() => {
     return () => {pb.authStore.onChange(() => {
-      setIsAuthenticated(getIsAuthenticated())
+      setIsAuthenticated(!!getCurrentUser())
     })}
   }, [])
 
@@ -44,10 +44,7 @@ export default function Header({ setQuery }: HeaderProps) {
       </div>
 
       <div className="flex items-center space-x-4">
-        <ProfileDropdown isAuthenticated={isAuthenticated} logout={() => {
-          logout()
-          router.refresh()
-        }}/>
+        <ProfileDropdown/>
       </div>
 
     </div>

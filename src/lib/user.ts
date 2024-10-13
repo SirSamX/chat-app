@@ -22,10 +22,6 @@ export async function getUser(id: string): Promise<RecordModel> {
   return await usersColl.getOne(id);
 }
 
-export function getIsAuthenticated() {
-  return !!getCurrentUser();
-}
-
 export async function deleteUser() {
   const user = getCurrentUser();
   if (!user) return;

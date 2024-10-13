@@ -2,38 +2,27 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {DropdownMenu, DropdownMenuContent, DropdownMenuSeparator,DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel} from "@/components/ui/dropdown-menu"
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getCurrentUser } from "@/lib/user";
+import { getCurrentUser, logout } from "@/lib/user";
 
 
-interface DropdownMenuProps {
-  isAuthenticated: boolean;
-  logout: () => void;
-}
-
-export default function ProfileDropdownMenu({ isAuthenticated, logout }: DropdownMenuProps) {
+export default function ProfileDropdownMenu() {
   const [name, setName] = useState("Login");
+  const [profilePicture, setProfilePicture] = useState("/profile.jpg")
   const router = useRouter();
   const user = getCurrentUser();
+  const isAuthenticated = !!user
 
-  const openProfile = () => {
+  const openProfilePage = () => {
     router.push(`/user/${user?.id}`);
   };
 
   useEffect(() => {
     if (!user) return;
     setName(user.username);
+    setProfilePicture(user.avatar)
   }, [user]);
-
-  function getAvatarImage() {
-    if (isAuthenticated) {
-      return `https://github.com/${user?.username}.png`;
-    } else {
-      return "/profile.jpg";
-    }
-  }
 
   return (
     <>
@@ -41,10 +30,12 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
         <DropdownMenuTrigger>
           <div className="flex items-center gap-2">
             <Avatar>
-              <AvatarImage src={getAvatarImage()} />
-              <AvatarFallback>CN</AvatarFallback> {/*TODO: First letters of name*/}
+              <AvatarImage src={profilePicture} />
+              <AvatarFallback className="outline outline-zinc-600 dark:outline-zinc-400">
+                {name[0]}
+              </AvatarFallback>
             </Avatar>
-            <span className="hidden md:block text-black dark:text-white">{name}</span>
+            <span className="hidden md:block">{name}</span>
           </div>
         </DropdownMenuTrigger>
 
@@ -52,10 +43,8 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           {!isAuthenticated && (
             <>
-              <DropdownMenuItem>
-                <Link href={"/login"}>
-                  Login
-                </Link>
+              <DropdownMenuItem onClick={() => router.push("/login")}>
+                Login
               </DropdownMenuItem>
               <DropdownMenuSeparator />
             </>
@@ -63,26 +52,25 @@ export default function ProfileDropdownMenu({ isAuthenticated, logout }: Dropdow
           {isAuthenticated && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={openProfile}>
+              <DropdownMenuItem onClick={openProfilePage}>
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href={"/settings"}>
-                  Settings
-                </Link>
+              <DropdownMenuItem onClick={() => router.push("/settings")}>
+                Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
             </>
           )}
-          <DropdownMenuItem>
-            <Link href={"https://chatap.pockethost.io/_/"}>
-              PocketBase
-            </Link>
+          <DropdownMenuItem onClick={() => window.open("https://chatap.pockethost.io/_/")}>
+            PocketBase
           </DropdownMenuItem>
           {isAuthenticated && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={logout}>
+              <DropdownMenuItem onClick={() => {
+                logout();
+                router.refresh();
+              }}>
                 Log Out
               </DropdownMenuItem>
             </>
