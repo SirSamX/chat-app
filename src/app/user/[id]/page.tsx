@@ -2,13 +2,14 @@
 
 import { deleteUser, getUser } from "@/lib/user";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { RecordModel } from "pocketbase";
 
 
-export default function Profile({ params }: { params: { id: string } }) {
+export default function Profile(props: { params: Promise<{ id: string }> }) {
+  const params = use(props.params);
   const [user, setUser] = useState<RecordModel | null>(null);
-  
+
 
   useEffect(() => {
     getUser(params.id)

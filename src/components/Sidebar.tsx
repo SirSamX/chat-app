@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, useContext } from "react"
+import { useState, useEffect, useRef } from "react"
 import ChatPreview from "./ChatPreview"
 import { Chat, createChat, getUserChats } from "@/lib/chat"
 import { useChatContext, CurrentChatContextType } from "./providers/ChatContext";
@@ -11,6 +11,7 @@ export default function Sidebar() {
   const [chats, setChats] = useState<Chat[]>([]);
   const [selectedChatIndex, setSelectedChatIndex] = useState(0);
   const { selectedChat, setSelectedChat } = useChatContext() as CurrentChatContextType;
+  const [displaySidebar, setDisplaySidebar] = useState(true)
   
 
   useEffect(() => {
@@ -52,13 +53,6 @@ export default function Sidebar() {
       .catch(error => {
         console.error(error);
       });
-  }
-
-  function getSelectedChatId() {
-    if (chats[selectedChatIndex]) {
-      return chats[selectedChatIndex].id;
-    }
-    return null;
   }
 
   function handleEnterKey(event: React.KeyboardEvent<HTMLInputElement>) {
