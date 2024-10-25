@@ -1,6 +1,6 @@
 import Sidebar from '../components/Sidebar';
 import ChatWindow from '../components/ChatWindow';
-import ChatContext from "@/components/providers/ChatContext"
+import ChatContext from "@/components/ChatContext"
 
 
 export default function Home() {

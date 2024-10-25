@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useContext } from "react"
 import ChatPreview from "./ChatPreview"
 import { Chat, createChat, getUserChats } from "@/lib/chat"
-import { useChatContext, CurrentChatContextType } from "./providers/ChatContext";
+import { useChatContext, CurrentChatContextType } from "./ChatContext";
 
 
 export default function Sidebar() {

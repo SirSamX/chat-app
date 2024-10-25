@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import ProfileDropdown from "@/components/ProfileDropdown";
 import Image from "next/image";
 import { getCurrentUser, logout } from "@/lib/user";
-import { useChatContext } from "./providers/ChatContext";
+import { useChatContext } from "./ChatContext";
 
 
 interface HeaderProps {
