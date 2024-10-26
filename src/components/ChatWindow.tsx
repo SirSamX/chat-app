@@ -13,7 +13,7 @@ import { getCurrentUser } from "@/lib/user";
 import { formatMessage } from "@/lib/message";
 import { MsgWrapper } from "./MsgWrapper";
 import { error } from "console";
-import { MsgSkeleton, MsgsSkeleton } from "./skeletons";
+import { MsgSkeleton, MsgsSkeleton } from "./Skeletons";
 
 
 export default function ChatWindow() {
@@ -65,13 +65,21 @@ export default function ChatWindow() {
   }, [query, messages]);
 
   useEffect(() => {
+    setIsLoading(true)
+    // async function fetchMessages() {
+    //   // Simulieren Sie hier das Laden Ihrer Nachrichten
+    //   await new Promise(resolve => setTimeout(resolve, 5000));
+    //   setMessages([{content: "Ello", date: new Date(), id: "1", sender: "self", senderName: "EnderMo23"}]);
+    //   setIsLoading(false);
+    // }
+    // fetchMessages()
     const user = getCurrentUser();
     if (!selectedChat || !user) {
       setIsLoading(false)
       return
     };
 
-    setIsLoading(true)
+    // setIsLoading(true)
     setMessages([])
 
     getChatMessages(selectedChat.id)
@@ -95,6 +103,9 @@ export default function ChatWindow() {
       messagesColl.unsubscribe('*')
     };
   }, [selectedChat, updateMessages]);
+  if(isLoading) {
+    throw new Promise(resolve => setTimeout(resolve, 5000))
+  }
 
   return (
     <div className="w-full h-screen bg-zinc-100 dark:bg-zinc-800 p-4 flex flex-col">
@@ -111,10 +122,7 @@ export default function ChatWindow() {
 
 
       <div className="flex grow flex-col-reverse overflow-y-scroll p-4">
-        {isLoading ? (
-          <MsgsSkeleton amount={filteredMessages.length}/>
-        ) : (
-          filteredMessages.map(({ id, sender, senderName, date, content }, index) => (
+          {filteredMessages.map(({ id, sender, senderName, date, content }, index) => (
             <Message
               id={id}
               key={index}
@@ -123,8 +131,7 @@ export default function ChatWindow() {
               date={date}
               content={content}
             />
-          ))
-        )}
+          ))}
       </div>
 
 
