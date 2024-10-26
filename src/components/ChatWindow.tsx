@@ -1,16 +1,19 @@
-"use client";
+"use client"
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, Suspense } from "react";
 import Message, { MessageProps } from "./Message";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { Textarea } from "@/components/ui/textarea"
 import Header from '../components/Header';
 import { getChatMessages, messagesColl, sendMessage } from "@/lib/message";
-import { CurrentChatContextType, useChatContext } from "@/components/providers/ChatContext";
+import { CurrentChatContextType, useChatContext } from "@/components/ChatContext";
 import { RecordModel } from "pocketbase";
 import { getCurrentUser } from "@/lib/user";
 import { formatMessage } from "@/lib/message";
+import { MsgWrapper } from "./MsgWrapper";
+import { error } from "console";
+import { MsgSkeleton, MsgsSkeleton } from "./Skeletons";
 
 
 export default function ChatWindow() {
@@ -19,6 +22,7 @@ export default function ChatWindow() {
   const messageInput = useRef<HTMLTextAreaElement>(null);
   const [query, setQuery] = useState("");
   const { selectedChat, setSelectedChat } = useChatContext() as CurrentChatContextType;
+  const [isLoading, setIsLoading] = useState(false);
   
   const updateMessages = useCallback((msg: RecordModel) => {
     setMessages((prevMessages) => [formatMessage(msg), ...prevMessages]);
@@ -61,18 +65,32 @@ export default function ChatWindow() {
   }, [query, messages]);
 
   useEffect(() => {
+    setIsLoading(true)
+    // async function fetchMessages() {
+    //   // Simulieren Sie hier das Laden Ihrer Nachrichten
+    //   await new Promise(resolve => setTimeout(resolve, 5000));
+    //   setMessages([{content: "Ello", date: new Date(), id: "1", sender: "self", senderName: "EnderMo23"}]);
+    //   setIsLoading(false);
+    // }
+    // fetchMessages()
     const user = getCurrentUser();
-    if (!selectedChat || !user) return;
+    if (!selectedChat || !user) {
+      setIsLoading(false)
+      return
+    };
 
+    // setIsLoading(true)
     setMessages([])
 
     getChatMessages(selectedChat.id)
-      .then(async messages => {
-        if (messages == null) return
-        setMessages(messages)
-      })
-      .catch((error) => {console.error(error)});
-
+    .then(async messages => {
+      if(messages == null) return;
+      setMessages(messages)
+    })
+    .catch((error) => console.error(error))
+    .finally(() => setIsLoading(false));
+    
+    
       messagesColl.subscribe('*', 
         (e) => {
           const msg = e.record
@@ -85,6 +103,9 @@ export default function ChatWindow() {
       messagesColl.unsubscribe('*')
     };
   }, [selectedChat, updateMessages]);
+  if(isLoading) {
+    throw new Promise(resolve => setTimeout(resolve, 5000))
+  }
 
   return (
     <div className="w-full h-screen bg-zinc-100 dark:bg-zinc-800 p-4 flex flex-col">
@@ -99,18 +120,20 @@ export default function ChatWindow() {
         </div>
       }
 
+
       <div className="flex grow flex-col-reverse overflow-y-scroll p-4">
-        {filteredMessages.map(({ id, sender,senderName, date, content }, index) => (
-          <Message
-            id={id}
-            key={index}
-            sender={sender}
-            senderName={senderName}
-            date={date}
-            content={content}
-          />
-        ))}
+          {filteredMessages.map(({ id, sender, senderName, date, content }, index) => (
+            <Message
+              id={id}
+              key={index}
+              sender={sender}
+              senderName={senderName}
+              date={date}
+              content={content}
+            />
+          ))}
       </div>
+
 
       <div className="p-2 border-t border-zinc-300 dark:border-zinc-700 flex items-center">
         <Textarea
