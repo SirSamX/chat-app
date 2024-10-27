@@ -1,5 +1,13 @@
-import ChatDropdown from "./ChatDropdown";
+"use client";
+
+import { useState, useEffect } from "react";
+import pb from "@/lib/pocketbase";
+import { useRouter } from "next/navigation";
+import ProfileDropdown from "@/components/ProfileDropdown";
 import Image from "next/image";
+import { getCurrentUser, logout } from "@/lib/user";
+import { useChatContext } from "./ChatContext";
+import ChatDropdown from "./ChatDropdown";
 
 
 interface HeaderProps {
@@ -7,12 +15,20 @@ interface HeaderProps {
 }
 
 export default function Header({ setQuery }: HeaderProps) {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!getCurrentUser());
+  const router = useRouter();
+  const currentChat = useChatContext();
   
+  useEffect(() => {
+    return () => {pb.authStore.onChange(() => {
+      setIsAuthenticated(!!getCurrentUser())
+    })}
+  }, [])
 
   return (
     <div className={`flex items-center justify-between w-full`}>
       <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-        <ChatDropdown />
+        <ChatDropdown/>
       </h2>
 
       <div className="flex w-1/2">
@@ -29,7 +45,7 @@ export default function Header({ setQuery }: HeaderProps) {
       </div>
 
       <div className="flex items-center space-x-4">
-        
+        <ProfileDropdown/>
       </div>
 
     </div>

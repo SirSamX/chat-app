@@ -1,8 +1,6 @@
 import Sidebar from '../components/Sidebar';
 import ChatWindow from '../components/ChatWindow';
 import ChatContext from "@/components/ChatContext"
-import { Suspense } from 'react';
-import { MsgSkeleton } from '@/components/Skeletons';
 
 
 export default function Home() {
@@ -12,11 +10,7 @@ export default function Home() {
 
         <div className="flex text-gray-900 dark:text-zinc-100">
           <Sidebar/>
-          
-          <Suspense fallback={<MsgSkeleton></MsgSkeleton>}>
-            <ChatWindow />
-          </Suspense>
-
+          <ChatWindow />
         </div>
 
       </ChatContext>

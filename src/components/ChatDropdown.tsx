@@ -1,5 +1,5 @@
 import {DropdownMenu, DropdownMenuContent, DropdownMenuSeparator,DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel} from "@/components/ui/dropdown-menu"
-import { useChatContext } from "./providers/ChatContext";
+import { useChatContext } from "./ChatContext";
 
 
 export default function ChatDropdown() {
