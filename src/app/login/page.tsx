@@ -1,50 +1,49 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { FormEvent } from "react";
 import AuthButtons from "@/components/AuthBtns";
-import { usersColl } from "@/lib/user";
-import { useRouter } from "next/navigation";
+import pb from "@/lib/pocketbase";
+import { getCurrentUser, usersColl } from "@/lib/user";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+
 
 export default function Login() {
-  const [error, setError] = useState("");
-  const router = useRouter();
 
+  
   async function login(formData: FormData) {
+    
     const nameOrEmail = formData.get("nameOrEmail") as string;
     const password = formData.get("password") as string;
 
-    if (!nameOrEmail || !password) {
-      setError("Bitte füllen Sie alle Felder aus.");
-      return;
-    }
-
     try {
       await usersColl.authWithPassword(nameOrEmail, password);
-      console.log("Successfully logged in");
-      router.push("/"); // Verwenden Sie router.push statt redirect
-    } catch (err) {
-      console.error(err);
-      if (err instanceof Error) {
-        setError(err.message || "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.");
-      } else {
-        setError("Ein unbekannter Fehler ist aufgetreten.");
-      }
+      console.log("Successfully logged in")
     }
+    catch(err) {
+      console.error(err);
+    }
+    redirect("/")
+
+
   }
 
-  return (
+  return(
     <>
       <form action={login}>
-        <input type="text" placeholder="Username/Email" name="nameOrEmail" required />
-        <input type="password" placeholder="Password" name="password" required />
+        <input type="text" placeholder="Username/Email" name="nameOrEmail" />
+        <input type="password" placeholder="password" name="password" />
+
         <button type="submit">Log In</button>
+
       </form>
 
-      {error && <p className="error">{error}</p>}
+      <p>Don&#39;t have an account?</p>
+      <Link className="text-blue-500" href={"/signup"}>Create one here!</Link>
 
       <div className="providers flex justify-center items-center w-full h-screen bg-gradient-to-br from-gray-600 to-black">
         <AuthButtons />
       </div>
     </>
-  );
+  )
 }

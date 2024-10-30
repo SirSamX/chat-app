@@ -1,5 +1,6 @@
 import { AuthModel, RecordModel } from "pocketbase";
 import pb from "./pocketbase"
+import { revalidatePath } from "next/cache";
 
 
 export const usersColl = pb.collection("users")

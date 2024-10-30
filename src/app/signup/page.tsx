@@ -5,6 +5,7 @@ import AuthButtons from "@/components/AuthBtns";
 import pb from "@/lib/pocketbase";
 import { getCurrentUser, usersColl } from "@/lib/user";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 
 export default function SignUp() {
@@ -50,10 +51,13 @@ export default function SignUp() {
         <button type="submit">Create Account</button>
 
       </form>
-{/* 
+
+        <p>Already have an account?</p>
+        <Link className="text-blue-500" href="/login">Log in here!</Link>
+
       <div className="providers flex justify-center items-center w-full h-screen bg-gradient-to-br from-gray-600 to-black">
         <AuthButtons />
-      </div> */}
+      </div>
     </>
   )
 }

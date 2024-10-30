@@ -3,9 +3,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuSeparator,DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel } from "@/components/ui/dropdown-menu"
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { getCurrentUser, logout } from "@/lib/user";
 import pb from "@/lib/pocketbase";
+import { revalidatePath } from "next/cache";
 
 
 export default function ProfileDropdownMenu() {
@@ -70,7 +71,7 @@ export default function ProfileDropdownMenu() {
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => {
                 logout();
-                router.refresh();
+                window.location.reload();
               }}>
                 Log Out
               </DropdownMenuItem>
