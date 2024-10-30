@@ -11,6 +11,7 @@ import { CurrentChatContextType, useChatContext } from "@/components/ChatContext
 import { RecordModel } from "pocketbase";
 import { getCurrentUser } from "@/lib/user";
 import { formatMessage } from "@/lib/message";
+import pb from "@/lib/pocketbase";
 
 
 export default function ChatWindow() {
@@ -48,6 +49,7 @@ export default function ChatWindow() {
   }
 
   useEffect(() => {
+    console.log(pb.authStore.model)
     if (!query) {
       setFilteredMessages(messages);
       return;
