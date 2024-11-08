@@ -26,7 +26,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({ provider, disabled = false, sty
       style={{ '--url': `url("/providers/${provider}.png")` } as React.CSSProperties}
       disabled={disabled}
     >
-        {capitalized(provider)}
+      {capitalized(provider)}
     </button>
   );
 };
