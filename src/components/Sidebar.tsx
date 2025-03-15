@@ -12,7 +12,6 @@ export default function Sidebar() {
   const [selectedChatIndex, setSelectedChatIndex] = useState(0);
   const { selectedChat, setSelectedChat } = useChatContext() as CurrentChatContextType;
   const [displaySidebar, setDisplaySidebar] = useState(true)
-  
 
   useEffect(() => {
     getUserChats()
